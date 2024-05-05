@@ -1,10 +1,9 @@
-## ExpNo 4 : Implement A* search algorithm for a Graph
-#### Name: Kamesh D
-#### Register Number: 212222240043
-## Aim:
-To ImplementA * Search algorithm for a Graph using Python 3.
-## Algorithm:
-``````
+<h1>ExpNo 4 : Implement A* search algorithm for a Graph</h1> 
+<h3>Name: Kamesh D</h3>
+<h3>REGISTER NUMBER:212222240043</h3>
+<H3>Aim:</H3>
+<p>To ImplementA * Search algorithm for a Graph using Python 3.</p>
+<H3>Algorithm:</H3>
 // A* Search Algorithm
 1.  Initialize the open list
 2.  Initialize the closed list
@@ -15,9 +14,9 @@ To ImplementA * Search algorithm for a Graph using Python 3.
        the open list, call it "q"
     b) pop q off the open list
     c) generate q's 8 successors and set their 
-       parents to q 
+       parents to q
     d) for each successor
-        i) if successor is the goal, stop search   
+        i) if successor is the goal, stop search
         ii) else, compute both g and h for successor
           successor.g = q.g + distance between 
                               successor and q
@@ -25,7 +24,7 @@ To ImplementA * Search algorithm for a Graph using Python 3.
           successor (This can be done using many 
           ways, we will discuss three heuristics- 
           Manhattan, Diagonal and Euclidean 
-          Heuristics)  
+          Heuristics)
           successor.f = successor.g + successor.h
         iii) if a node with the same position as 
             successor is in the OPEN list which has a 
@@ -37,109 +36,76 @@ To ImplementA * Search algorithm for a Graph using Python 3.
      end (for loop)
     e) push q on the closed list
     end (while loop)
-``````
 ## Program:
 ```py
-from collections import defaultdict
-H_dist ={}
-def aStarAlgo(start_node, stop_node):
-    open_set = set(start_node)
-    closed_set = set()
-    g = {}               #store distance from starting node
-    parents = {}         # parents contains an adjacency map of all nodes
-    #distance of starting node from itself is zero
-    g[start_node] = 0
-#start_node is root node i.e it has no parent nodes
-#so start_node is set to its own parent node
-parents[start_node] = start_node
-while len(open_set) > 0:
-    n = None
-    #node with lowest f() is found
-    for v in open_set:
-        if n == None or g[v] + heuristic(v) < g[n] + heuristic(n):
-            n = v
-    if n == stop_node or Graph_nodes[n] == None:
-        pass
-    else:
-        for (m, weight) in get_neighbors(n):
-            #nodes 'm' not in first and last set are added to first
-            #n is set its parent
-            if m not in open_set and m not in closed_set:
-                open_set.add(m)
-                parents[m] = n
-                g[m] = g[n] + weight
-            #for each node m,compare its distance from start i.e g(m) to the
-            #from start through n node
-            else:
-                if g[m] > g[n] + weight:
-                    #update g(m)
-                    g[m] = g[n] + weight
-                    #change parent of m to n
-                    parents[m] = n
-                    #if m in closed set,remove and add to open
-                    if m in closed_set:
-                        closed_set.remove(m)
-                        open_set.add(m)
-    if n == None:
-        print('Path does not exist!')
-        return None
-# if the current node is the stop_node
-# then we begin reconstructin the path from it to the start_node
+import heapq
 
-    if n == stop_node:
-        path = []
-        while parents[n] != n:
-            path.append(n)
-            n = parents[n]
-        path.append(start_node)
-        path.reverse()
-        print('Path found: {}'.format(path))
-        return path
-    # remove n from the open_list, and add it to closed_list
-    # because all of his neighbors were inspected
-    open_set.remove(n)
-    closed_set.add(n)
-print('Path does not exist!')
-return None
-#define fuction to return neighbor and its distance
-#from the passed node
-def get_neighbors(v):
-    if v in Graph_nodes:
-        return Graph_nodes[v]
-    else:
+class Graph:
+    def __init__(self):
+        self.vertices = {}
+
+    def add_vertex(self, vertex, edges):
+        self.vertices[vertex] = edges
+
+    def heuristic(self, node, goal):
+        # A simple heuristic function, you may modify this according to your problem
+        return abs(node[0] - goal[0]) + abs(node[1] - goal[1])
+
+    def a_star_search(self, start, goal):
+        open_set = []
+        heapq.heappush(open_set, (0, start))
+        came_from = {}
+        g_score = {vertex: float('inf') for vertex in self.vertices}
+        g_score[start] = 0
+        f_score = {vertex: float('inf') for vertex in self.vertices}
+        f_score[start] = self.heuristic(start, goal)
+
+        while open_set:
+            current = heapq.heappop(open_set)[1]
+
+            if current == goal:
+                path = []
+                while current in came_from:
+                    path.append(current)
+                    current = came_from[current]
+                path.append(start)
+                return path[::-1]
+
+            for neighbor in self.vertices[current]:
+                tentative_g_score = g_score[current] + self.vertices[current][neighbor]
+                if tentative_g_score < g_score[neighbor]:
+                    came_from[neighbor] = current
+                    g_score[neighbor] = tentative_g_score
+                    f_score[neighbor] = tentative_g_score + self.heuristic(neighbor, goal)
+                    if neighbor not in [item[1] for item in open_set]:
+                        heapq.heappush(open_set, (f_score[neighbor], neighbor))
         return None
-def heuristic(n):
-    return H_dist[n]       
-'''Graph_nodes = {
-    'A': [('B', 6), ('F', 3)],
-    'B': [('A', 6), ('C', 3), ('D', 2)],
-    'C': [('B', 3), ('D', 1), ('E', 5)],
-    'D': [('B', 2), ('C', 1), ('E', 8)],
-    'E': [('C', 5), ('D', 8), ('I', 5), ('J', 5)],
-    'F': [('A', 3), ('G', 1), ('H', 7)],
-    'G': [('F', 1), ('I', 3)],
-    'H': [('F', 7), ('I', 2)],
-    'I': [('E', 5), ('G', 3), ('H', 2), ('J', 3)],
-}
-graph = defaultdict(list)
-n,e = map(int,input().split())
-for i in range(e):
-    u,v,cost = map(str,input().split())
-    t=(v,float(cost))
-    graph[u].append(t)
-    t1=(u,float(cost))
-    graph[v].append(t1)
-for i in range(n):
-    node,h=map(str,input().split())
-    H_dist[node]=float(h)
-print(H_dist)
-Graph_nodes=graph
-print(graph)
-aStarAlgo('S', 'G')
+if __name__ == "__main__":
+    graph = Graph()
+    graph.add_vertex('A', {'B': 5, 'C': 10})
+    graph.add_vertex('B', {'A': 5, 'D': 8})
+    graph.add_vertex('C', {'A': 10, 'D': 5})
+    graph.add_vertex('D', {'B': 8, 'C': 5})
+
+    start = 'A'
+    goal = 'D'
+
+    path = graph.a_star_search(start, goal)
+    if path:
+        print("Path found:", path)
+    else:
+        print("Path not found")
+
 ```
-##  Sample Graph I
-![image](https://github.com/KameshLeVI/19AI405ExpNo4/assets/120780633/a9154bef-446a-4cd0-8a71-95cfbb6bb1a4)
-## Sample Input
+<hr>
+<h2>Sample Graph I</h2>
+<hr>
+
+![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/b1377c3f-011a-4c0f-a843-516842ae056a)
+
+<hr>
+<h2>Sample Input</h2>
+<hr>
 10 14 <br>
 A B 6 <br>
 A F 3 <br>
@@ -169,10 +135,14 @@ J 0 <br>
 <h2>Sample Output</h2>
 <hr>
 Path found: ['A', 'F', 'G', 'I', 'J']
+
+
 <hr>
 <h2>Sample Graph II</h2>
 <hr>
-![image](https://github.com/KameshLeVI/19AI405ExpNo4/assets/120780633/7895ba36-0f5f-4db3-9502-04cba6a5c4fd)
+
+![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/acbb09cb-ed39-48e5-a59b-2f8d61b978a3)
+
 
 <hr>
 <h2>Sample Input</h2>
@@ -194,3 +164,5 @@ G 0 <br>
 <h2>Sample Output</h2>
 <hr>
 Path found: ['A', 'E', 'D', 'G']
+### Result:
+Thus the graph was constructed and implementation of A* Serach algorithm for the same graph done successfully.
