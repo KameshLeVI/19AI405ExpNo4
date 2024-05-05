@@ -172,7 +172,8 @@ Path found: ['A', 'F', 'G', 'I', 'J']
 <hr>
 <h2>Sample Graph II</h2>
 <hr>
-![image](https://github.com/KameshLeVI/19AI405ExpNo4/assets/120780633/dc46f13a-40b6-47a4-a554-627128d9458c)
+![image](https://github.com/KameshLeVI/19AI405ExpNo4/assets/120780633/7895ba36-0f5f-4db3-9502-04cba6a5c4fd)
+
 <hr>
 <h2>Sample Input</h2>
 <hr>
