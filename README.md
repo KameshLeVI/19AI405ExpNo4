@@ -4,26 +4,20 @@
 ## Aim:
 To ImplementA * Search algorithm for a Graph using Python 3.
 ## Algorithm:
-
 ``````
 // A* Search Algorithm
 1.  Initialize the open list
 2.  Initialize the closed list
     put the starting node on the open 
     list (you can leave its f at zero)
-
 3.  while the open list is not empty
     a) find the node with the least f on 
        the open list, call it "q"
-
     b) pop q off the open list
-  
     c) generate q's 8 successors and set their 
-       parents to q
-   
+       parents to q 
     d) for each successor
-        i) if successor is the goal, stop search
-        
+        i) if successor is the goal, stop search   
         ii) else, compute both g and h for successor
           successor.g = q.g + distance between 
                               successor and q
@@ -31,26 +25,19 @@ To ImplementA * Search algorithm for a Graph using Python 3.
           successor (This can be done using many 
           ways, we will discuss three heuristics- 
           Manhattan, Diagonal and Euclidean 
-          Heuristics)
-          
+          Heuristics)  
           successor.f = successor.g + successor.h
-
         iii) if a node with the same position as 
             successor is in the OPEN list which has a 
            lower f than successor, skip this successor
-
         iV) if a node with the same position as 
             successor  is in the CLOSED list which has
             a lower f than successor, skip this successor
             otherwise, add  the node to the open list
      end (for loop)
-  
     e) push q on the closed list
     end (while loop)
-
 ``````
-
-
 ## Program:
 ```py
 from collections import defaultdict
@@ -62,10 +49,8 @@ def aStarAlgo(start_node, stop_node):
     parents = {}         # parents contains an adjacency map of all nodes
     #distance of starting node from itself is zero
     g[start_node] = 0
-
 #start_node is root node i.e it has no parent nodes
 #so start_node is set to its own parent node
-
 parents[start_node] = start_node
 while len(open_set) > 0:
     n = None
@@ -116,9 +101,6 @@ while len(open_set) > 0:
     closed_set.add(n)
 print('Path does not exist!')
 return None
-
-
-
 #define fuction to return neighbor and its distance
 #from the passed node
 def get_neighbors(v):
@@ -127,8 +109,7 @@ def get_neighbors(v):
     else:
         return None
 def heuristic(n):
-    return H_dist[n]
-          
+    return H_dist[n]       
 '''Graph_nodes = {
     'A': [('B', 6), ('F', 3)],
     'B': [('A', 6), ('C', 3), ('D', 2)],
@@ -157,14 +138,8 @@ print(graph)
 aStarAlgo('S', 'G')
 ```
 ##  Sample Graph I
-
-
 ![image](https://github.com/KameshLeVI/19AI405ExpNo4/assets/120780633/a9154bef-446a-4cd0-8a71-95cfbb6bb1a4)
-
-
-
 ## Sample Input
-
 10 14 <br>
 A B 6 <br>
 A F 3 <br>
@@ -194,16 +169,10 @@ J 0 <br>
 <h2>Sample Output</h2>
 <hr>
 Path found: ['A', 'F', 'G', 'I', 'J']
-
-
 <hr>
 <h2>Sample Graph II</h2>
 <hr>
-
 ![image](https://github.com/KameshLeVI/19AI405ExpNo4/assets/120780633/dc46f13a-40b6-47a4-a554-627128d9458c)
-
-
-
 <hr>
 <h2>Sample Input</h2>
 <hr>
